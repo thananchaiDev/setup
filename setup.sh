@@ -48,6 +48,7 @@ done
 CASKS=(
   1password
   android-studio
+  flutter
   google-chrome
   visual-studio-code
   warp
