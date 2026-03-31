@@ -18,10 +18,14 @@ fi
 # --------------------------------------------------
 # 2. Homebrew formulae
 # --------------------------------------------------
+# Tap for Bun
+brew tap oven-sh/bun 2>/dev/null || true
+
 FORMULAE=(
-  bun
+  oven-sh/bun/bun
   chezmoi
   gh
+  mas
   lazygit
   mysql-client
   node
@@ -48,8 +52,10 @@ done
 CASKS=(
   1password
   android-studio
+  docker
   flutter
   google-chrome
+  microsoft-teams
   visual-studio-code
   warp
 )
@@ -60,7 +66,7 @@ for cask in "${CASKS[@]}"; do
   if brew list --cask "$cask" &>/dev/null; then
     echo "  $cask already installed"
   else
-    brew install --cask "$cask"
+    brew install --cask --adopt "$cask"
   fi
 done
 
@@ -79,14 +85,19 @@ fi
 # --------------------------------------------------
 # 5. Xcode (via App Store)
 # --------------------------------------------------
+echo ""
 if ! xcode-select -p &>/dev/null; then
-  echo ""
   echo "Installing Xcode Command Line Tools..."
   xcode-select --install
-  echo "  After Xcode CLT finishes, install full Xcode from App Store manually"
+  echo "  Waiting for Xcode CLT to finish before continuing..."
+  until xcode-select -p &>/dev/null; do sleep 5; done
+fi
+
+if ! mas list | grep -q "497799835"; then
+  echo "Installing Xcode from App Store..."
+  mas install 497799835
 else
-  echo ""
-  echo "Xcode Command Line Tools already installed"
+  echo "Xcode already installed"
 fi
 
 # --------------------------------------------------
@@ -99,13 +110,6 @@ if ! command -v claude &>/dev/null; then
 else
   echo "Claude Code already installed"
 fi
-
-# --------------------------------------------------
-# 8. Dotfiles via chezmoi
-# --------------------------------------------------
-echo ""
-echo "Applying dotfiles with chezmoi..."
-chezmoi init --apply 2>/dev/null || echo "  Run 'chezmoi init <your-repo>' manually to set up dotfiles"
 
 # --------------------------------------------------
 # 9. macOS defaults
@@ -146,4 +150,3 @@ echo "  2. Sign in to 1Password"
 echo "  3. Sign in to GitHub CLI: gh auth login"
 echo "  4. Set up SSH keys"
 echo "  5. Open VS Code and sign in to sync settings"
-echo "  6. Install full Xcode from App Store"
