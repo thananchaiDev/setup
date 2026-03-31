@@ -32,6 +32,7 @@ FORMULAE=(
   pnpm
   python@3.13
   yarn
+  jq
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
