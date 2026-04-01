@@ -23,7 +23,6 @@ brew tap oven-sh/bun 2>/dev/null || true
 
 FORMULAE=(
   oven-sh/bun/bun
-  chezmoi
   gh
   mas
   lazygit
@@ -51,25 +50,25 @@ done
 # 3. Homebrew casks (GUI apps)
 # --------------------------------------------------
 CASKS=(
+  warp
   1password
-  android-studio
+  visual-studio-code
+  microsoft-teams
   docker
   flutter
-  google-chrome
-  microsoft-teams
-  visual-studio-code
-  warp
+  android-studio
 )
 
 echo ""
-echo "Installing Homebrew casks..."
+echo "Installing Homebrew casks (parallel)..."
 for cask in "${CASKS[@]}"; do
   if brew list --cask "$cask" &>/dev/null; then
     echo "  $cask already installed"
   else
-    brew install --cask --adopt "$cask"
+    brew install --cask --adopt "$cask" &
   fi
 done
+wait
 
 # --------------------------------------------------
 # 4. Oh My Zsh
@@ -138,18 +137,6 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 killall Finder 2>/dev/null || true
-
-# --------------------------------------------------
-# 10. Dotfiles (chezmoi)
-# --------------------------------------------------
-echo ""
-echo "Applying dotfiles via chezmoi..."
-if chezmoi data &>/dev/null; then
-  echo "chezmoi already initialized, applying..."
-  chezmoi apply
-else
-  chezmoi init --apply https://github.com/thananchaiDev/dotfiles
-fi
 
 # --------------------------------------------------
 # Done
