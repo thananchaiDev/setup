@@ -48,6 +48,7 @@ echo "--- Marketplaces ---"
 add_marketplace "thedotmack"              "thedotmack/claude-mem"
 add_marketplace "everything-claude-code"  "affaan-m/everything-claude-code"
 add_marketplace "claude-plugins-official" "https://github.com/anthropics/claude-plugins-official.git"
+add_marketplace "context-mode"            "mksglu/context-mode"
 echo ""
 
 # --------------------------------------------------
@@ -58,6 +59,7 @@ install_plugin "claude-mem@thedotmack"
 install_plugin "everything-claude-code@everything-claude-code"
 install_plugin "frontend-design@claude-plugins-official"
 install_plugin "superpowers@claude-plugins-official"
+install_plugin "context-mode@context-mode"
 echo ""
 
 # --------------------------------------------------
