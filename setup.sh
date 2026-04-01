@@ -140,14 +140,19 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 killall Finder 2>/dev/null || true
 
 # --------------------------------------------------
+# 10. Dotfiles (chezmoi)
+# --------------------------------------------------
+echo ""
+echo "Applying dotfiles via chezmoi..."
+if chezmoi data &>/dev/null; then
+  echo "chezmoi already initialized, applying..."
+  chezmoi apply
+else
+  chezmoi init --apply https://github.com/thananchaiDev/dotfiles
+fi
+
+# --------------------------------------------------
 # Done
 # --------------------------------------------------
 echo ""
 echo "=== Setup complete! ==="
-echo ""
-echo "Manual steps:"
-echo "  1. chezmoi init <your-dotfiles-repo> (if not set up)"
-echo "  2. Sign in to 1Password"
-echo "  3. Sign in to GitHub CLI: gh auth login"
-echo "  4. Set up SSH keys"
-echo "  5. Open VS Code and sign in to sync settings"
