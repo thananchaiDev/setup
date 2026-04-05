@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== macOS Setup Script ==="
+echo "=== Setup Script (mac) ==="
 echo ""
 
 # --------------------------------------------------
@@ -24,8 +24,8 @@ brew tap oven-sh/bun 2>/dev/null || true
 FORMULAE=(
   oven-sh/bun/bun
   gh
-  mas
   lazygit
+  mas
   mysql-client
   node
   pnpm
@@ -83,7 +83,7 @@ else
 fi
 
 # --------------------------------------------------
-# 5. Xcode (via App Store)
+# 5. Xcode
 # --------------------------------------------------
 echo ""
 if ! xcode-select -p &>/dev/null; then
@@ -112,7 +112,7 @@ else
 fi
 
 # --------------------------------------------------
-# 9. macOS defaults
+# 7. macOS defaults
 # --------------------------------------------------
 echo ""
 echo "Applying macOS defaults..."

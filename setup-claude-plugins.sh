@@ -85,6 +85,34 @@ echo "  Done"
 echo ""
 
 # --------------------------------------------------
+# 4. Claude Code env — CLAUDE_PLUGIN_ROOT for ECC hooks
+# --------------------------------------------------
+echo "--- Claude Code env ---"
+SETTINGS="$HOME/.claude/settings.json"
+
+# Detect latest ECC plugin version from cache
+ECC_CACHE="$HOME/.claude/plugins/cache/everything-claude-code"
+if [ -d "$ECC_CACHE" ]; then
+  ECC_ORG=$(ls "$ECC_CACHE" | head -1)
+  ECC_VER=$(ls "$ECC_CACHE/$ECC_ORG" 2>/dev/null | sort -V | tail -1)
+  ECC_PLUGIN_ROOT="$ECC_CACHE/$ECC_ORG/$ECC_VER"
+else
+  ECC_PLUGIN_ROOT=""
+fi
+
+if [ -n "$ECC_PLUGIN_ROOT" ] && [ -f "$SETTINGS" ] && command -v jq &>/dev/null; then
+  UPDATED=$(jq --arg v "$ECC_PLUGIN_ROOT" '.env.CLAUDE_PLUGIN_ROOT = $v' "$SETTINGS")
+  echo "$UPDATED" > "$SETTINGS"
+  echo "  CLAUDE_PLUGIN_ROOT=$ECC_PLUGIN_ROOT"
+  echo "  Done"
+elif ! command -v jq &>/dev/null; then
+  echo "  WARN: jq not found, skipping env config"
+else
+  echo "  WARN: ECC plugin cache not found, skipping"
+fi
+echo ""
+
+# --------------------------------------------------
 # Done
 # --------------------------------------------------
 echo "=== Done! ==="
